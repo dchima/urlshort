@@ -21,24 +21,25 @@ const UrlController = {
     url,
   },{ req, models }) {
     if (!isValidURL(url)) throw new Error('this is not a url string');
-    let r = Math.random().toString(36).substring(7);
+    const check_url = await find(models.Url, { initial_url: url });
+    if (check_url) throw new Error('this url already exists');
+    let r = Math.random().toString(36).substring(4);
     console.log(r)
-    const check = await find(models.Url, { url_short: r });
-    if (check) throw new Error('this short already exists');
-    const data = await add(models.Url, url);
+    const check_short = await find(models.Url, { url_short: r });
+    if (check_short) throw new Error('this short already exists');
+    const data = await add(models.Url, {
+      initial_url: url,
+      url_short: r,
+    });
     // data.url_short = `${BASEURL}${r}`
     return data;
   },
-  // async getUrl(root, { url_short }, { req, modles }) {
-  //   // break base url, get just the short
-  //   url_short.split('');
-  //   // https://bit.a/
-  //   url_short = url_short[7:];
-  //   const data = await find(models.Url, { url_short });
-  //   if (!data) throw new Error('this short does not exist');
-  //   // req.res.redirect('');
-  //   document.location.href(`${data.initial_url}`)
-  // }
+  
+  async getUrl(root, { url_short }, { req, models }) {
+    const data = await find(models.Url, { url_short });
+    if (!data) throw new Error('this short does not exist');
+    return data;
+  }
 
 };
 

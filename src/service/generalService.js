@@ -4,7 +4,7 @@ const services = {
       const { dataValues: value } = await model.create(data);
       return value;
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       throw new Error(error);
     }
   },

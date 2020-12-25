@@ -10,7 +10,7 @@ const typeDefs = gql`
 
   type Query {
     getUrl(
-      short_url: String!
+      url_short: String!
       ): Url
   }
 
